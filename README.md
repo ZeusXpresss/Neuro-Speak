@@ -15,8 +15,15 @@ I am not an expert, if there is an issue, I may not be able to fix it but I will
 
 ## 💡 Install Instructions
 
+```bash
+# Install
+git clone https://github.com/ZeusXpresss/Neuro-Speak.git
 
+```
 
-> [Required]
+There is a install_dependencies.bat file inside the main folder you will need to run.  This will install all the dependencies and requirements that is needed for the program to work.
+
 > You still need to install Tesseract OCR manually. Download it from: https://github.com/UB-Mannheim/tesseract/wiki
 > Default path expected by your program: C:\Program Files\Tesseract-OCR\tesseract.exe
+
+## 💻 How to use
