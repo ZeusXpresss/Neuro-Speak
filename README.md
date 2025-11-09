@@ -16,16 +16,20 @@ I am not an expert, if there is an issue, I may not be able to fix it but I will
 ## 💡 Install Instructions
 
 ```bash
-# Install
 git clone https://github.com/ZeusXpresss/Neuro-Speak.git
 
 ```
 
-There is a install_dependencies.bat file inside the main folder you will need to run.  This will install all the dependencies and requirements that is needed for the program to work.
+There is a install_dependencies.bat file inside the main folder you will need to run.  This will install all the dependencies and requirements that is needed for the program to work and it will check if you have the below installed to ensure the program works correctly.
 
-You still need to install Tesseract OCR manually. Download it from: [https://github.com/UB-Mannheim/tesseract/wiki](https://github.com/UB-Mannheim/tesseract/wiki)
+You need Python 3.10 exactly, its the only stable version that I know works currently: https://www.python.org/downloads/release/python-3100/
+You need to install NG-Speak, this is required for the TTS to actually speak: https://github.com/espeak-ng/espeak-ng/releases/tag/1.52.0
+You need to install Visual Studio C++ Build Tools: https://visualstudio.microsoft.com/downloads/?q=build+tools
+
+Lastly, You need to install Tesseract OCR manually: [https://github.com/UB-Mannheim/tesseract/wiki](https://github.com/UB-Mannheim/tesseract/wiki)
 Default path expected by program: C:\Program Files\Tesseract-OCR\tesseract.exe
 
+(You shouldn't get errors, but if you do, ask google gemini and upload the .bat file, they will walk you through the process)
 
 ## 💻 How to use
 
