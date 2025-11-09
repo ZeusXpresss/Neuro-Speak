@@ -41,4 +41,8 @@ You can type text into the text box and press the speak button.  You can also se
 > [!TIP]
 > You can change hotkeys in the options menu.  The hotkeys for scan mode are under development.  They work, you just cant change the hotkeys for scan mode just yet.
 
-  Alternatively, if you are playing a game or reading a book that does not have copyable text, you can click the Scan button.  Hit select screen area, drag a selection on your primary monitor.  [If your game is on another monitor, you will need to change that monitor to be primary using the windows display settings]  After dragging a selection, press "Click and Scan".
+  Alternatively, if you are playing a game or reading a book that does not have copyable text, you can click the Scan button.  Hit select screen area, drag a selection on your primary monitor.  [If your game is on another monitor, you will need to change that monitor to be primary using the windows display settings]  After dragging a selection, press "Trigger Scan".  This will scan your region for WHITE text, then sends it to TTS to read.
+
+If something does not work in the scan page, press the capture screenshot button.  This will create a png file in the TTS directory, this image shows you what the scanner saw.  Keep in mind that the Scanner only sees white text (ie. #ffffff).
+
+If you are using this program for Renpy games.  Be sure to check the "Renpy Mode" in the TTS GUI, this essentially pre-processes text so the TTS speech is cleaner.  Example: It clears out line breaks so the TTS does not pause when a line break happens.  Instead it merges to 2 lines and creates a space, so the 2 lines are one sentence allowing TTS to say the line with no pauses.
