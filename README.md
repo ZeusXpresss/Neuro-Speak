@@ -29,16 +29,16 @@ Default path expected by program: C:\Program Files\Tesseract-OCR\tesseract.exe
 
 ## 💻 How to use
 
-Open TTS.AI.py with CMD | There is a Run TTS.bat file.  You can edit this so its easier to open.
+Open TTS_AI.py with the CMD console | There is a Run TTS.bat file.  You can edit this so its easier to open.
 ```bash
 python "Path to TTS.AI.py"
 pause
 ```
-Once opened, the program will import all necessary dependencies.  After a bunch of debug information, the GUI should open. You need to select a Model and a Voice.  The model VITS and Voice p243 should be selected by default.
+Once opened, the program will import all necessary dependencies.  After a bunch of debug information, the GUI should open. You need to select a Model and a Voice.  The model VITS and Voice p243 should be selected by default. (this is the best model/voice in my opinion)
 
 You can type text into the text box and press the speak button.  You can also select any text you want (like something on a browser) and press z, pressing z will auto copy selected text and TTS will read it.
 
 > [!TIP]
 > You can change hotkeys in the options menu.  The hotkeys for scan mode are under development.  They work, you just cant change the hotkeys for scan mode just yet.
 
-  Alternatively, if you are playing a game or reading a book that does not have copyable text, you can click the Scan button.
+  Alternatively, if you are playing a game or reading a book that does not have copyable text, you can click the Scan button.  Hit select screen area, drag a selection on your primary monitor.  [If your game is on another monitor, you will need to change that monitor to be primary using the windows display settings]  After dragging a selection, press "Click and Scan".
