@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="ns-logo.png" alt="Neuro Speak Logo" width="100">
+    <img src="ns-logo.png" alt="Neuro Speak Logo" width="150">
 </p>
 
 
