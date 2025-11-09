@@ -1,7 +1,5 @@
 <p align="center">
-
-    <img src="https://i.fbcd.co/products/resized/resized-242-161/ns-logo-letter-designs-2-0b319d10b570977e726529aec62dfca5426a8e9108926026300b293d8657135b.jpg">
-
+    <img src="ns-logo.png" alt="Neuro Speak Logo">
 </p>
 
 
