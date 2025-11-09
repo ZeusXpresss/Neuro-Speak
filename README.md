@@ -1,7 +1,5 @@
 <p align="center">
-
-    <img src="ns-logo.png" alt="Neuro Speak Logo">
-
+    <img src="ns-logo.png" alt="Neuro Speak Logo" width="300">
 </p>
 
 
