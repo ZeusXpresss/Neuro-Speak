@@ -50,3 +50,7 @@ You can type text into the text box and press the speak button.  You can also se
 If something does not work in the scan page, press the capture screenshot button.  This will create a png file in the TTS directory, this image shows you what the scanner saw.  Keep in mind that the Scanner only sees white text (ie. #ffffff).
 
 If you are using this program for Renpy games.  Be sure to check the "Renpy Mode" in the TTS GUI, this essentially pre-processes text so the TTS speech is cleaner.  Example: It clears out line breaks so the TTS does not pause when a line break happens.  Instead it merges to 2 lines and creates a space, so the 2 lines are one sentence allowing TTS to say the line with no pauses.
+
+## 🚀 Future In Developemnet Features
+
+I plan to add a simple way to add an AI model.  Right now, the only way is my downloading your own and editing the code.
