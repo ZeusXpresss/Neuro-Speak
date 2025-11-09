@@ -5,7 +5,7 @@
 
 ---
 
-## 🦉 Neuro Speak Overview
+## Neuro Speak Overview
 
 Your own custom uncensored private local text-to-speech program is here! Copy and paste text from a game or book and have TTS read it aloud. Alternatively, it can scan a region on your computer and read text (ie. Renpy games). Download any TTS model from hugging face or use default ones to get started!
 
@@ -13,7 +13,7 @@ I am not an expert, if there is an issue, I may not be able to fix it but I will
 
 ---
 
-## 🦉 Install Instructions
+## 💡 Install Instructions
 
 
 
