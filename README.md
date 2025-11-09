@@ -23,8 +23,10 @@ git clone https://github.com/ZeusXpresss/Neuro-Speak.git
 
 There is a install_dependencies.bat file inside the main folder you will need to run.  This will install all the dependencies and requirements that is needed for the program to work.
 
-```json
-// You still need to install Tesseract OCR manually. Download it from: [https://github.com/UB-Mannheim/tesseract/wiki](https://github.com/UB-Mannheim/tesseract/wiki)
-// Default path expected by your program: C:\Program Files\Tesseract-OCR\tesseract.exe
+> [!TIP]
+> **New!** Strix now integrates seamlessly with GitHub Actions and CI/CD pipelines. Automatically scan for vulnerabilities on every pull request and block insecure code before it reaches production!
+
+> <span style="color: green;">You still need to install Tesseract OCR manually. Download it from: https://github.com/UB-Mannheim/tesseract/wiki</span>
+> Default path expected by your program: C:\Program Files\Tesseract-OCR\tesseract.exe
 
 ## 💻 How to use
