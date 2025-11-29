@@ -1,3 +1,5 @@
+# window_scanner.py
+
 import tkinter as tk
 from tkinter import messagebox, scrolledtext, simpledialog
 from PIL import Image
@@ -15,6 +17,7 @@ import keyboard # Import for global hotkey
 # --- Global Configuration and Styling ---
 COMM_FILE = "tts_input.txt"
 TRIGGER_FILE = "tts_trigger.txt" # Must match TTS AI.py
+CANCEL_FILE = "tts_cancel.txt"   # ADDED: Must match TTS AI.py
 
 # NEW: Continuous Scan Configuration
 MAX_SCAN_TIME = 5.0 # seconds
@@ -399,6 +402,23 @@ class ScannerApp:
 
         if roi_rect and self.trigger_btn['state'] == tk.NORMAL:
 
+            # --- NEW: File-Based Cancel for Reliable Stop (Spacebar or Button) ---
+            if simulate_click: # Only cancel if it's the click/scan action
+                try:
+                    # 1. Write the dedicated CANCEL file
+                    with open(CANCEL_FILE, 'w', encoding='utf-8') as f:
+                        f.write("CANCEL")
+                    print(f"Wrote cancel file: {CANCEL_FILE}")
+
+                    # 2. Use a small, quick delay (0.1s) to allow the TTS_AI file watcher to process
+                    # the cancel file before the new scan text is written.
+                    time.sleep(0.1)
+
+                except Exception as e:
+                    print(f"Error writing cancel file: {e}")
+            # -----------------------------------------------------------------------
+
+
             # --- CONDITIONAL Left Click ---
             if simulate_click:
                 try:
@@ -418,15 +438,14 @@ class ScannerApp:
                  # Hotkey is SPACEBAR or GUI Button
                  scan_target = perform_continuous_scan
                  self.trigger_btn.config(state=tk.DISABLED, text="Scanning (Continuous)...")
-                 print("DEBUG: Selected CONTINUOUS scan (Spacebar/Button).") # DEBUG PRINT
+                 print("DEBUG: Selected CONTINUOUS scan (Spacebar/Button).")
             else:
                  # Hotkey is 'R'
                  scan_target = perform_single_scan
                  self.trigger_btn.config(state=tk.DISABLED, text="Scanning (Single)...")
-                 print("DEBUG: Selected SINGLE scan (R key).") # DEBUG PRINT
+                 print("DEBUG: Selected SINGLE scan (R key).")
 
             # Start the scan thread with the selected target function
-            # Arguments are (text_widget, self) for both functions
             scan_thread = threading.Thread(target=scan_target, args=(self.text_widget, self), daemon=True)
             scan_thread.start()
 

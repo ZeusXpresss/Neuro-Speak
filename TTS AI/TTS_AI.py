@@ -1,3 +1,5 @@
+# TTS_AI.py
+
 print("Getting things ready, this may take a while...")
 
 import torch
@@ -12,26 +14,35 @@ import time
 import re
 import keyboard
 import os
-import json # NEW: Import JSON library for file persistence
+import json # Import JSON library for file persistence
+import program
 
 from options import OptionsWindow
 from window_scanner import select_window_area
 
 from TTS.api import TTS
 
+from program import app_settings, save_config, toggle_renpy_mode
+
 # --- Configuration ---
 COMM_FILE = "tts_input.txt"
 TRIGGER_FILE = "tts_trigger.txt"
-CONFIG_FILE = "config.json"       # NEW: File to store persistent user settings
+CANCEL_FILE = "tts_cancel.txt"    # ADDED: Dedicated file for reliable cancellation
 
-# --- NEW Code to Delete COMM_FILE at Startup ---
+# --- Delete COMM_FILE at Startup ---
 try:
     if os.path.exists(COMM_FILE):
         os.remove(COMM_FILE)
         print(f"Cleaned up old communication file: {COMM_FILE}")
+    # Also clean up CANCEL_FILE and TRIGGER_FILE on startup for a fresh start
+    if os.path.exists(CANCEL_FILE):
+        os.remove(CANCEL_FILE)
+    if os.path.exists(TRIGGER_FILE):
+        os.remove(TRIGGER_FILE)
+
 except Exception as e:
     # Log any unexpected error during deletion
-    print(f"Error deleting file {COMM_FILE}: {e}")
+    print(f"Error deleting startup files: {e}")
 # -----------------------------------------------
 
 # --- Globals and State Management ---
@@ -42,67 +53,23 @@ stream = None
 chunk_size = 1024
 last_read_normalized_text = ""
 
-# Default Application settings
-DEFAULT_SETTINGS = {
-    "speak_hotkey": "z",
-    "cancel_hotkey": "x",
-    "file_watch_interval": 200,
-    "renpy_mode": False
-}
-
-# Variable to hold current runtime settings (initialized by load_config)
-app_settings = DEFAULT_SETTINGS.copy()
-
-
-# --- Persistence Functions (NEW) ---
-
-def load_config():
-    """Loads settings from config.json or returns default settings if the file doesn't exist."""
-    global app_settings
-    if os.path.exists(CONFIG_FILE):
-        try:
-            with open(CONFIG_FILE, 'r') as f:
-                loaded_settings = json.load(f)
-                # Merge loaded settings with defaults to handle new keys gracefully
-                app_settings = {**DEFAULT_SETTINGS, **loaded_settings}
-                print(f"Loaded settings from {CONFIG_FILE}.")
-                return
-        except json.JSONDecodeError:
-            print(f"Error reading {CONFIG_FILE}. Using default settings.")
-
-    app_settings = DEFAULT_SETTINGS.copy()
-    print("No config file found or error occurred. Using default settings.")
-
-
-def save_config(settings):
-    """Saves the current application settings to config.json."""
-    try:
-        with open(CONFIG_FILE, 'w') as f:
-            json.dump(settings, f, indent=4)
-        print(f"Settings saved to {CONFIG_FILE}")
-    except Exception as e:
-        print(f"Error saving config file: {e}")
-
 # --- Load Config on Startup ---
-load_config()
+program.load_config()
 # ------------------------------
 
-
-# Device
+# initialization
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
 
-# Default model
 DEFAULT_MODEL = "tts_models/en/vctk/vits"
-# Default voice
+
 DEFAULT_VOICE = "p243"
 tts = TTS(DEFAULT_MODEL, progress_bar=False).to(device)
 
-# Voice filters for VITS
 VITS_ALLOWED_VOICES = ["p229", "p230", "p234", "p238", "p241", "p243", "p250", "p257", "p260"]
 
-# --- Text Preprocessing ---
 
+# --- Text Preprocessing ---
 def normalize_text(text):
     """
     Cleans up text for reliable comparison, preventing silent failures
@@ -130,6 +97,7 @@ def preprocess_text(text):
 
         # 2. Convert pipe symbol to 'I'
         text = text.replace("|", "I")
+        text = text.replace("$", "s")
 
 
     # ... (Preprocess logic remains the same)
@@ -199,6 +167,8 @@ def preprocess_text(text):
 
     # Remove extra spaces created by removals
     text = re.sub(r'\s+', ' ', text).strip()
+
+    text = re.sub(r'\*', '', text)
 
     return text
 
@@ -278,7 +248,11 @@ def stop_stream():
 def speak_text_streaming(text_to_speak):
     """Accepts text and streams the TTS output."""
     global is_paused, is_cancelled, audio_queue
-    text_to_speak = preprocess_text(text_to_speak)
+
+    # --- FIX 1: REMOVED internal call to preprocess_text() ---
+    # Caller functions (file_watcher and global_on_speak_key) now provide pre-processed text.
+    # text_to_speak = preprocess_text(text_to_speak)
+
     if not text_to_speak:
         return
 
@@ -341,12 +315,20 @@ def cancel_playback():
     print("Playback cancelled.")
 
 # --- File Watching Logic ---
-
 def file_watcher():
     """Continuously checks the communication files for trigger and text updates."""
     global last_read_normalized_text
 
     try:
+        # --- NEW: Check for dedicated Cancel File (Inter-Process Communication) ---
+        if os.path.exists(CANCEL_FILE):
+            cancel_playback()
+            # CRITICAL: Reset the guard after cancellation to ensure the next scan speaks
+            last_read_normalized_text = ""
+            os.remove(CANCEL_FILE)
+            print(f"File-based cancellation processed. Guard reset.")
+        # ---------------------------------------------
+
         current_raw_text = ""
 
         # 1. Read raw text from the file (if it exists)
@@ -354,7 +336,12 @@ def file_watcher():
             with open(COMM_FILE, 'r', encoding='utf-8') as f:
                 current_raw_text = f.read().strip()
 
-        current_normalized_text = normalize_text(current_raw_text)
+        # --- FIX 3A: Preprocess the raw text to get the version for TTS and display ---
+        current_processed_text = preprocess_text(current_raw_text)
+        # --- End FIX 3A ---
+
+        # The normalized text (used for the speech guard) should be based on the processed text.
+        current_normalized_text = normalize_text(current_processed_text)
 
         # 2. Check for the manual trigger file
         trigger_exists = os.path.exists(TRIGGER_FILE)
@@ -374,10 +361,12 @@ def file_watcher():
 
                     # Update the local GUI textbox
                     text_box.delete("1.0", tk.END)
-                    text_box.insert("1.0", current_raw_text)
+                    # --- FIX 3B: Insert the PROCESSED text ---
+                    text_box.insert("1.0", current_processed_text)
 
                     # Speak the new text
-                    speak_text_streaming(current_raw_text)
+                    # --- FIX 3C: Speak the PROCESSED text ---
+                    speak_text_streaming(current_processed_text)
 
                     # Update the tracking variable with the normalized text
                     last_read_normalized_text = current_normalized_text
@@ -403,7 +392,8 @@ def file_watcher():
         # We only update the GUI text box if the text changed but there was NO active trigger
         elif current_normalized_text and current_normalized_text != last_read_normalized_text and not trigger_exists:
              text_box.delete("1.0", tk.END)
-             text_box.insert("1.0", current_raw_text)
+             # --- FIX 3D: Insert the PROCESSED text ---
+             text_box.insert("1.0", current_processed_text)
 
 
     except Exception as e:
@@ -415,16 +405,9 @@ def file_watcher():
 
 # --- GUI and Settings Management ---
 
-# Function to run when the Renpy Mode checkbox is toggled
-def toggle_renpy_mode():
-    """Updates global app_settings and prints a message for Renpy Mode state."""
-    # This reflects the change in the main window's checkbox immediately to app_settings
-    app_settings["renpy_mode"] = renpy_mode_var.get()
-    print(f"Renpy Mode set to: {app_settings['renpy_mode']}")
-    save_config(app_settings) # Auto-save when toggling this specific setting
-
 
 # Callback function used by OptionsWindow to save settings
+
 def save_settings_callback(new_settings):
     """
     Updates the global app_settings dictionary, rebinds hotkeys, and saves to file.
@@ -487,7 +470,7 @@ ENTRY_BG = "#2d2d2d"
 root.configure(bg=BG_COLOR)
 
 # Text box
-text_box = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=60, height=15,
+text_box = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=80, height=15,
                                      font=("Arial", 12), bg=ENTRY_BG, fg=FG_COLOR, insertbackground="white")
 text_box.pack(padx=10, pady=10)
 
@@ -554,7 +537,8 @@ options_button = tk.Button(action_buttons_frame, text="Options", command=open_op
 options_button.pack(side=tk.LEFT, padx=5)
 
 # Speak button uses text from its own textbox for manual testing (Positioned Second)
-speak_button = tk.Button(action_buttons_frame, text="Speak", command=lambda: speak_text_streaming(text_box.get("1.0", tk.END).strip()),
+# NOTE: The command for this button must also be updated to ensure the displayed text is spoken.
+speak_button = tk.Button(action_buttons_frame, text="Speak", command=lambda: speak_text_streaming(preprocess_text(text_box.get("1.0", tk.END).strip())),
                          font=("Arial", 12), bg=BTN_GREEN, fg="white", relief="flat", width=10)
 speak_button.pack(side=tk.LEFT, padx=5)
 
@@ -577,8 +561,11 @@ def clear_text():
 def paste_text():
     try:
         clipboard_content = root.clipboard_get()
+        # --- Update paste_text to insert PROCESSED text ---
+        processed_text = preprocess_text(clipboard_content)
         text_box.delete("1.0", tk.END)
-        text_box.insert("1.0", clipboard_content)
+        text_box.insert("1.0", processed_text)
+        # --- End Update ---
     except tk.TclError:
         pass
 
@@ -622,10 +609,15 @@ def global_on_speak_key():
 
         clipboard_content = root.clipboard_get()
 
-        text_box.delete("1.0", tk.END)
-        text_box.insert("1.0", clipboard_content)
+        # --- FIX 2A: Preprocess the text ---
+        processed_text = preprocess_text(clipboard_content)
 
-        speak_text_streaming(clipboard_content)
+        text_box.delete("1.0", tk.END)
+        # --- FIX 2B: Insert the PROCESSED text ---
+        text_box.insert("1.0", processed_text)
+
+        # --- FIX 2C: Speak the PROCESSED text ---
+        speak_text_streaming(processed_text)
 
     except Exception as e:
         print("Error copying selected text:", e)

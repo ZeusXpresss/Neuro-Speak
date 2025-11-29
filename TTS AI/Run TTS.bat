@@ -1,2 +1,2 @@
-python "C:\TTS AI\TTS_AI.py"
+python "C:\Users\trist\Desktop\TTS AI\TTS_AI.py"
 pause

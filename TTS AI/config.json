@@ -2,7 +2,7 @@
     "speak_hotkey": "z",
     "cancel_hotkey": "x",
     "file_watch_interval": 200,
-    "renpy_mode": false,
+    "renpy_mode": true,
     "hotkey_continuous_scan": "space",
     "hotkey_reset_crop": "r"
 }
