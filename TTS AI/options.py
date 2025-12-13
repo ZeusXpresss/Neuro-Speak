@@ -31,7 +31,7 @@ class OptionsWindow(tk.Toplevel):
         if 'hotkey_continuous_scan' not in self.current_settings:
             self.current_settings['hotkey_continuous_scan'] = 'space'
         if 'hotkey_reset_crop' not in self.current_settings:
-            self.current_settings['hotkey_reset_crop'] = 'r'
+            self.current_settings['hotkey_reset_crop'] = 'ctrl+r'
         # -------------------------------------------------------------------
 
         self.save_callback = save_callback

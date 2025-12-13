@@ -1,8 +1,14 @@
 {
-    "speak_hotkey": "z",
-    "cancel_hotkey": "x",
+    "speak_hotkey": "ctrl+z",
+    "cancel_hotkey": "ctrl+x",
     "file_watch_interval": 200,
     "renpy_mode": true,
     "hotkey_continuous_scan": "space",
-    "hotkey_reset_crop": "r"
+    "hotkey_reset_crop": "ctrl+r",
+    "roi_rect": [
+        1792,
+        839,
+        1967,
+        1440
+    ]
 }

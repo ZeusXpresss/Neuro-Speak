@@ -17,12 +17,12 @@ from window_scanner import select_window_area
 
 from TTS.api import TTS
 
-# --- Configuration Constants (MOVED from TTS_AI.py) ---
+# --- Configuration Constants ---
 CONFIG_FILE = "config.json"
 
 DEFAULT_SETTINGS = {
-    "speak_hotkey": "z",
-    "cancel_hotkey": "x",
+    "speak_hotkey": "ctrl+z",
+    "cancel_hotkey": "ctrl+x",
     "file_watch_interval": 200,
     "renpy_mode": True
 }

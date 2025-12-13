@@ -1,2 +1,2 @@
-python "C:\Users\trist\Desktop\TTS AI\TTS_AI.py"
+python "C:\Users\User\Desktop\Neuro-Speak\TTS AI\TTS_AI.py" - enter your path
 pause
