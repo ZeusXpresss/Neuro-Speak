@@ -27,7 +27,7 @@ You need to install Visual Studio C++ Build Tools: https://visualstudio.microsof
 Lastly, You need to install Tesseract OCR manually: [https://github.com/UB-Mannheim/tesseract/wiki](https://github.com/UB-Mannheim/tesseract/wiki)
 Default path expected by program: C:\Program Files\Tesseract-OCR\tesseract.exe
 
-(You shouldn't get errors, but if you do, you can ask a LLM (like google gemini or ChatGPT) and upload the .bat and log file, they should walk you through the process)
+(You shouldn't get errors, but if you do, you can ask a LLM (like Google Gemini or ChatGPT) and upload the .bat and log file, they should walk you through the process)
 
 ## 💻 How to use
 
@@ -52,5 +52,6 @@ If you are using this program for Renpy games.  Be sure to check the "Renpy Mode
 ## 🚀 Future In Developemnet Features
 
 I plan to add a simple way to add an AI model.  Right now, the only way is my downloading your own and editing the code.
+
 
 
