@@ -20,7 +20,7 @@ git clone https://github.com/ZeusXpresss/Neuro-Speak.git
 
 There is a install_dependencies.bat file inside the main folder you will need to run.  This will install all the dependencies and requirements that is needed for the program to work and it will check if you have the below installed to ensure the program works correctly.
 
-You need Python 3.10 exactly, its the only stable version that I know works currently: https://www.python.org/downloads/release/python-3100/
+You need Python 3.10 exactly, its the only stable version that has been tested: https://www.python.org/downloads/release/python-3100/
 You need to install NG-Speak, this is required for the TTS to actually speak: https://github.com/espeak-ng/espeak-ng/releases/tag/1.52.0
 You need to install Visual Studio C++ Build Tools: https://visualstudio.microsoft.com/downloads/?q=build+tools
 
@@ -52,4 +52,5 @@ If you are using this program for Renpy games.  Be sure to check the "Renpy Mode
 ## 🚀 Future In Developemnet Features
 
 I plan to add a simple way to add an AI model.  Right now, the only way is my downloading your own and editing the code.
+
 
