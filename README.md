@@ -9,8 +9,6 @@
 
 Your own custom uncensored private local text-to-speech program is here! Copy and paste text from a game or book and have TTS read it aloud. Alternatively, it can scan a region on your computer and read text (ie. Renpy games). Download any TTS model from hugging face or use default ones to get started!
 
-I am not an expert, if there is an issue, I may not be able to fix it but I will try.
-
 ---
 
 ## 💡 Install Instructions
@@ -29,7 +27,7 @@ You need to install Visual Studio C++ Build Tools: https://visualstudio.microsof
 Lastly, You need to install Tesseract OCR manually: [https://github.com/UB-Mannheim/tesseract/wiki](https://github.com/UB-Mannheim/tesseract/wiki)
 Default path expected by program: C:\Program Files\Tesseract-OCR\tesseract.exe
 
-(You shouldn't get errors, but if you do, ask google gemini and upload the .bat file, they will walk you through the process)
+(You shouldn't get errors, but if you do, you can ask a LLM (like google gemini or ChatGPT) and upload the .bat and log file, they should walk you through the process)
 
 ## 💻 How to use
 
@@ -54,3 +52,4 @@ If you are using this program for Renpy games.  Be sure to check the "Renpy Mode
 ## 🚀 Future In Developemnet Features
 
 I plan to add a simple way to add an AI model.  Right now, the only way is my downloading your own and editing the code.
+
